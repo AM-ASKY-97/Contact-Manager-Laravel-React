@@ -75,9 +75,23 @@ class ContactController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Contact $contact)
+    public function update(Request $request, $id)
     {
-        //
+        $user = Contact::find($id); //Model Name
+
+        $user->Avatar = $request->input('Avatar');
+        $user->firstName = $request->input('firstName');
+        $user->lastName = $request->input('lastName');
+        $user->user = $request->input('contact');
+        $user->email = $request->input('email');
+
+        $user->update();
+
+        return response()->json([
+            'status' => 200,
+            'message' => "User Update Successfully"
+        ]);
+
     }
 
     /**

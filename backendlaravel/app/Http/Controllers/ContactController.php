@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Contact;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ContactController extends Controller
 {
@@ -34,13 +36,18 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
+        $imageName = Str::random(32).".".$request->Avatar->getClientOriginalExtension();
+
         $user = new Contact(); //Model Name
 
-        $user->Avatar = $request->input('Avatar');
+        $user->Avatar = $imageName;
         $user->firstName = $request->input('firstName');
         $user->lastName = $request->input('lastName');
-        $user->user = $request->input('contact');
+        $user->contact = $request->input('contact');
         $user->email = $request->input('email');
+
+        // Save Image in Storage folder
+        Storage::disk('public')->put($imageName, file_get_contents($request->Avatar));
 
         $user->save();
 
@@ -77,13 +84,29 @@ class ContactController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = Contact::find($id); //Model Name
 
-        $user->Avatar = $request->input('Avatar');
+        $user = Contact::find($id);
+
         $user->firstName = $request->input('firstName');
         $user->lastName = $request->input('lastName');
-        $user->user = $request->input('contact');
+        $user->contact = $request->input('contact');
         $user->email = $request->input('email');
+
+        if($request->Avatar) {
+            // Public storage
+            $storage = Storage::disk('public');
+
+            // Old iamge delete
+            if($storage->exists($user->Avatar))
+                $storage->delete($user->Avatar);
+
+            // Image name
+            $imageName = Str::random(32).".".$request->Avatar->getClientOriginalExtension();
+            $user->Avatar = $imageName;
+
+            // Image save in public folder
+            $storage->put($imageName, file_get_contents($request->Avatar));
+        }
 
         $user->update();
 
@@ -91,7 +114,6 @@ class ContactController extends Controller
             'status' => 200,
             'message' => "User Update Successfully"
         ]);
-
     }
 
     /**

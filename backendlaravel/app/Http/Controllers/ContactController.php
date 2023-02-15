@@ -29,15 +29,15 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        $contact = new Contact(); //Model Name
+        $user = new Contact(); //Model Name
 
-        $contact->Avatar = $request->input('Avatar');
-        $contact->firstName = $request->input('firstName');
-        $contact->lastName = $request->input('lastName');
-        $contact->contact = $request->input('contact');
-        $contact->email = $request->input('email');
+        $user->Avatar = $request->input('Avatar');
+        $user->firstName = $request->input('firstName');
+        $user->lastName = $request->input('lastName');
+        $user->user = $request->input('contact');
+        $user->email = $request->input('email');
 
-        $contact->save();
+        $user->save();
 
         return response()->json([
             'status' => 200,

@@ -13,7 +13,12 @@ class ContactController extends Controller
      */
     public function index()
     {
-        //
+        $user = Contact::all();
+
+        return response()->json([
+            'status' => 200,
+            'user' => $user,
+        ]);
     }
 
     /**

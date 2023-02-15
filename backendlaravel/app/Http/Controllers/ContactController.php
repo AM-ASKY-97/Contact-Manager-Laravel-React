@@ -62,9 +62,14 @@ class ContactController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Contact $contact)
+    public function edit($id)
     {
-        //
+        $user = Contact::find($id);
+
+        return response()->json([
+            'status' => 200,
+            'user' => $user,
+        ]);
     }
 
     /**

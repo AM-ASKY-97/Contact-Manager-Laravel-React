@@ -97,8 +97,16 @@ class ContactController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Contact $contact)
+    public function destroy($id)
     {
-        //
+        $user = Contact::find($id);
+
+        $user->delete();
+
+        return response()->json([
+            'status' => 200,
+            'message' => "User Deleted Successfully"
+        ]);
+
     }
 }

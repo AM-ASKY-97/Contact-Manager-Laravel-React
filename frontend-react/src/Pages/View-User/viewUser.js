@@ -12,7 +12,7 @@ const viewUser = () => {
                     <div className="col pt-2">
                         <p className="h5 fw-bold">Simple address book with React js and Laravel</p>
                     </div>
-                    <div className="col text-end"><Link To="" class="btn btn-success"><i class="fa fa-user" aria-hidden="true"></i> Add New Contact</Link></div>
+                    <div className="col text-end"><Link to="/add-user" class="btn btn-success"><i class="fa fa-user" aria-hidden="true"></i> Add New Contact</Link></div>
                 </div>
                 <hr />
             </div>
@@ -38,9 +38,9 @@ const viewUser = () => {
                         <td>0775311974</td>
                         <td>am.asky97@gmail.com</td>
                         <td colSpan={3}>
-                            <Link To="" className="btn btn-primary btn-sm" style={{marginRight:'6px'}}><i class="fa fa-search-plus" aria-hidden="true"></i> View</Link>
-                            <Link To="" className="btn btn-warning btn-sm" style={{marginRight:'6px'}}><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</Link>
-                            <Link To="" className="btn btn-danger btn-sm"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</Link>
+                            <Link to="" className="btn btn-primary btn-sm" style={{marginRight:'6px'}}><i class="fa fa-search-plus" aria-hidden="true"></i> View</Link>
+                            <Link to="" className="btn btn-warning btn-sm" style={{marginRight:'6px'}}><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</Link>
+                            <Link to="" className="btn btn-danger btn-sm"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</Link>
                         </td>
                     </tr>
                 </tbody>

@@ -15,7 +15,7 @@ const footer = () => {
                     <div className="row pt-4 d-flex justify-content-between">
                         <div className="col-sm-12 col-md-3 mb-3">
                             <h1 style={{fontSize: '1.1rem'}} className="pb-2">ABOUT US</h1>
-                            <hr width="60px" style={{marginTop: '15px;'}} />
+                            <hr width="60px" style={{marginTop: '15px'}} />
 
                             <p style={{fontSize: '0.9rem', textAlign:'justify', fontWeight:'400'}}>Energetic, hardworking,
                                 innovative and ambitious person with a great passion for software engineering field.</p>

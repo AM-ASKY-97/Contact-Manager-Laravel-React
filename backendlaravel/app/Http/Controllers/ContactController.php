@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class ContactController extends Controller
 {
@@ -36,26 +37,49 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        $imageName = Str::random(32).".".$request->Avatar->getClientOriginalExtension();
+        //$imageName = Str::random(32).".".$request->Avatar->getClientOriginalExtension();
 
-        $user = new Contact(); //Model Name
-
-        $user->Avatar = $imageName;
-        $user->firstName = $request->input('firstName');
-        $user->lastName = $request->input('lastName');
-        $user->contact = $request->input('contact');
-        $user->email = $request->input('email');
-
-        // Save Image in Storage folder
-        Storage::disk('public')->put($imageName, file_get_contents($request->Avatar));
-
-        $user->save();
-
-        return response()->json([
-            'status' => 200,
-            'message' => "User Addedd Successfully"
+        $validator = Validator::make($request->all(),[
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'contact' => 'required|max:10|min:10',
+            'email' => 'required',
+            'Avatar' => 'required|image|mimes:jpeg,jpg,png,gif,svg|max:2048',
         ]);
 
+        if($validator->fails()){
+            return response()->json([
+                'validator_error' => $validator->messages()
+            ]);
+        }
+
+        else{
+            $user = new Contact(); //Model Name
+
+            //$user->Avatar = $imageName;
+            $user->firstName = $request->input('firstName');
+            $user->lastName = $request->input('lastName');
+            $user->contact = $request->input('contact');
+            $user->email = $request->input('email');
+
+            // Save Image in Storage folder
+            //Storage::disk('public')->put($imageName, file_get_contents($request->Avatar));
+
+            if($request->hasfile('Avatar')){
+                $file = $request->file('Avatar');
+                $extention = $file->getClientOriginalExtension();
+                $filename = time().'.'.$extention;
+                $file->move('upload/students/', $filename);
+                $user->Avatar = $filename;
+            }
+
+            $user->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => "User Addedd Successfully"
+            ]);
+        }
     }
 
     /**

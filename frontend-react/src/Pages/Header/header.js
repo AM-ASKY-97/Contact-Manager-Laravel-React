@@ -11,6 +11,7 @@ const header = () => {
                         className="d-inline-block align-text-top" />
                         <span className="text-light fw-bold font-monospace">E-education</span>
                 </a>
+                <span className="text-light fw-bold font-monospace text-end"><i className="fa fa-user-circle-o" aria-hidden="true"></i> A. M. Asky</span>
             </div>
         </nav>
     )

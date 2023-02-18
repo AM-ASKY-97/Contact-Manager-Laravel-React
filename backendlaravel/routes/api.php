@@ -19,7 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/', [ContactController::class, 'index']);
+Route::get('index', [ContactController::class, 'index']);
 Route::post('store', [ContactController::class, 'store']);
 Route::get('edit/{id}', [ContactController::class, 'edit']);
 Route::put('update/{id}', [ContactController::class, 'update']);

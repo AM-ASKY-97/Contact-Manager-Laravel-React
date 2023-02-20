@@ -15,7 +15,8 @@ const AddUser = () => {
         lastName: "",
         contact: "",
         email: "",
-        error_list:[],
+        address: "",
+        error_list: [],
     })
 
     const handleChange = (event) => {
@@ -39,6 +40,7 @@ const AddUser = () => {
         formData.append('lastName', inputs.lastName);
         formData.append('email', inputs.email);
         formData.append('contact', inputs.contact);
+        formData.append('address', inputs.address)
 
         axios.post('http://127.0.0.1:8000/api/store', formData).then(res => {
             if (res.data.status == 200) {
@@ -61,8 +63,10 @@ const AddUser = () => {
                 navigate('/');
             }
 
-            else{
-                setInputs({...inputs, error_list: res.data.validator_error})
+            else {
+                setInputs({
+                    ...inputs, error_list: res.data.validator_error 
+                })
             }
         }).catch(() => {
             Swal.fire({
@@ -70,8 +74,8 @@ const AddUser = () => {
                 icon: 'error',
                 title: 'Oops...',
                 text: "Unable to store new user. Please check the database connection"
-              })
-          })
+            })
+        })
     }
 
     return (
@@ -107,7 +111,7 @@ const AddUser = () => {
                         <div className="row mb-3">
                             <div className="col-xs-12 col-sm-12 col-md-6">
                                 <label htmlFor="" className="form-label">Email</label>
-                                <input type="email" name="email" value={inputs.email} id="" className="form-control" onChange={handleChange} />
+                                <input type="text" name="email" value={inputs.email} id="" className="form-control" onChange={handleChange} />
                                 <span className="text-danger" id="email">{inputs.error_list.email}</span>
                             </div>
 
@@ -118,10 +122,18 @@ const AddUser = () => {
                             </div>
                         </div>
 
-                        <div className="mb-3">
-                            <label htmlFor="formFileMultiple" className="form-label">Select your profile photo</label>
-                            <input className="form-control" type="file" id="formFileMultiple" name="Avatar" onChange={handleImage} />
-                            <span className="text-danger" id="phoneNumber">{inputs.error_list.Avatar}</span>
+                        <div className="row mb-3">
+                            <div className="col-xs-12 col-sm-12 col-md-6">
+                                <label htmlFor="" className="form-label">Address</label>
+                                <input type="text" name="address" value={inputs.address} id="" className="form-control" onChange={handleChange} />
+                                <span className="text-danger" id="email">{inputs.error_list.address}</span>
+                            </div>
+
+                            <div className="col-xs-12 col-sm-12 col-md-6">
+                                <label htmlFor="formFileMultiple" className="form-label">Select your profile photo</label>
+                                <input className="form-control" type="file" id="formFileMultiple" name="Avatar" onChange={handleImage} />
+                                <span className="text-danger" id="phoneNumber">{inputs.error_list.Avatar}</span>
+                            </div>
                         </div>
 
                         <button className='btn btn-success'><i className="fa fa-check-circle" aria-hidden="true"></i> Submit</button>

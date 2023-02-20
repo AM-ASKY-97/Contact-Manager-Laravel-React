@@ -1,23 +1,54 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
+import Error_page from '../Error_page/Error_page'
 
 const ViewUser = () => {
 
     const [getValue, setValue] = useState([]);
     const [loding, setLoding] = useState([true]);
+    const [error_loding, seterrorLoding] = useState([true]);
 
     useEffect(() => {
         axios.get('http://127.0.0.1:8000/api/index').then(res => {
             if (res.data.status === 200) {
                 setValue(res.data.user);
                 setLoding(false);
+                seterrorLoding(false);
             }
+        }).catch(() => {
+            setLoding(false)
         })
     }, []);
 
     var student_table = "";
+    var err_loding = "";
+
+    if (error_loding) {
+        if (!loding) {
+            err_loding = <Error_page />
+        }
+    }
+
+    const deleteStudent = (e, id) => {
+        const clickBtn = e.currentTarget;
+        clickBtn.innerText = "Deleting";
+
+        axios.delete('http://127.0.0.1:8000/api/destroy/' + id).then(res => {
+            clickBtn.closest("tr").remove();
+            if (res.data.status === 200) {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: res.data.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+        })
+    }
 
     if (loding) {
         student_table =
@@ -35,16 +66,16 @@ const ViewUser = () => {
             return (
                 <tr key={item.id}>
                     <td>
-                        <img src={'http://localhost:8000/upload/students/'+item.Avatar} width="50px" alt='Avatar'/>
+                        <img src={'http://localhost:8000/upload/students/' + item.Avatar} width="50px" alt='Avatar' />
                     </td>
                     <td>{item.firstName}</td>
                     <td>{item.lastName}</td>
                     <td>{item.contact}</td>
                     <td>{item.email}</td>
-                    <td colSpan={3}>
-                        <Link to="" className="btn btn-primary btn-sm" style={{ marginRight: '6px' }}><i className="fa fa-search-plus" aria-hidden="true"></i> View</Link>
-                        <Link to="" className="btn btn-warning btn-sm" style={{ marginRight: '6px' }}><i className="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</Link>
-                        <Link to="" className="btn btn-danger btn-sm"><i className="fa fa-trash-o" aria-hidden="true"></i> Delete</Link>
+                    <td colSpan={3} className="">
+                        <Link to={"ViewOneUser/" + item.id} className="btn btn-primary btn-sm" style={{ marginRight: '6px' }}><i className="fa fa-search-plus" aria-hidden="true"></i> View</Link>
+                        <Link to={"edit_user/" + item.id} className="btn btn-warning btn-sm" style={{ marginRight: '6px' }}><i className="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</Link>
+                        <Link onClick={(e) => deleteStudent(e, item.id)} className="btn btn-danger btn-sm"><i className="fa fa-trash-o" aria-hidden="true"></i> Delete</Link>
                     </td>
                 </tr>
             );
@@ -54,10 +85,12 @@ const ViewUser = () => {
         <div className='container py-3'>
             <div className="container pt-1">
                 <div className="row">
-                    <div className="col-12 col-md-6 pt-2">
-                        <p className="h5 fw-bold">Simple address book with React js and Laravel</p>
+                    <div className="col-12 col-md-3 pb-3">
+                        <form class="d-flex" role="search">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+                        </form>
                     </div>
-                    <div className="col-12 col-md-6 text-end"><Link to="/add-user" className="btn btn-success"><i className="fa fa-user" aria-hidden="true"></i> Add New Contact</Link></div>
+                    <div className="col-12 col-md-9 text-end"><Link to="/add-user" className="btn btn-success"><i className="fa fa-user" aria-hidden="true"></i> Add New Contact</Link></div>
                 </div>
                 <hr />
             </div>
@@ -79,6 +112,7 @@ const ViewUser = () => {
                     </tbody>
                 </table>
             </div>
+            {err_loding}
         </div>
     )
 }

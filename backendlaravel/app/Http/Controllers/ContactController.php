@@ -39,21 +39,20 @@ class ContactController extends Controller
     {
         //$imageName = Str::random(32).".".$request->Avatar->getClientOriginalExtension();
 
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'firstName' => 'required',
             'lastName' => 'required',
             'contact' => 'required|max:10|min:10',
-            'email' => 'required',
-            'Avatar' => 'required|image|mimes:jpeg,jpg,png,gif,svg|max:2048',
+            'email' => 'required|email|unique:contacts',
+            'Avatar' => 'required|image',
+            'address' => 'required'
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'validator_error' => $validator->messages()
             ]);
-        }
-
-        else{
+        } else {
             $user = new Contact(); //Model Name
 
             //$user->Avatar = $imageName;
@@ -61,14 +60,15 @@ class ContactController extends Controller
             $user->lastName = $request->input('lastName');
             $user->contact = $request->input('contact');
             $user->email = $request->input('email');
+            $user->address = $request->input('address');
 
             // Save Image in Storage folder
             //Storage::disk('public')->put($imageName, file_get_contents($request->Avatar));
 
-            if($request->hasfile('Avatar')){
+            if ($request->hasfile('Avatar')) {
                 $file = $request->file('Avatar');
                 $extention = $file->getClientOriginalExtension();
-                $filename = time().'.'.$extention;
+                $filename = time() . '.' . $extention;
                 $file->move('upload/students/', $filename);
                 $user->Avatar = $filename;
             }
@@ -85,15 +85,7 @@ class ContactController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Contact $contact)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
+    public function show($id)
     {
         $user = Contact::find($id);
 
@@ -104,40 +96,71 @@ class ContactController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit($id)
+    {
+        $user = Contact::find($id);
+
+        if($user)
+        {
+            return response()->json([
+                'status' => 200,
+                'user' => $user,
+            ]);
+        }
+
+        else
+        {
+            return response()->json([
+                'status' => 404,
+                'message' => "No Student ID Found",
+            ]);
+        }
+    }
+
+    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
 
-        $user = Contact::find($id);
-
-        $user->firstName = $request->input('firstName');
-        $user->lastName = $request->input('lastName');
-        $user->contact = $request->input('contact');
-        $user->email = $request->input('email');
-
-        if($request->Avatar) {
-            // Public storage
-            $storage = Storage::disk('public');
-
-            // Old iamge delete
-            if($storage->exists($user->Avatar))
-                $storage->delete($user->Avatar);
-
-            // Image name
-            $imageName = Str::random(32).".".$request->Avatar->getClientOriginalExtension();
-            $user->Avatar = $imageName;
-
-            // Image save in public folder
-            $storage->put($imageName, file_get_contents($request->Avatar));
-        }
-
-        $user->update();
-
-        return response()->json([
-            'status' => 200,
-            'message' => "User Update Successfully"
+        $validator = Validator::make($request->all(), [
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'contact' => 'required|max:10|min:10',
+            'address' => 'required'
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'validator_error' => $validator->messages()
+        ]);
+
+        } else {
+            $user = Contact::find($id);
+
+            $user->firstName = $request->input('firstName');
+            $user->lastName = $request->input('lastName');
+            $user->contact = $request->input('contact');
+            $user->address = $request->input('address');
+
+            if ($request->hasfile('Avatar')) {
+                $file = $request->file('Avatar');
+                $extention = $file->getClientOriginalExtension();
+                $filename = time() . '.' . $extention;
+                $file->move('upload/students/', $filename);
+                $user->Avatar = $filename;
+            }
+
+
+            $user->update();
+
+            return response()->json([
+                'status' => 200,
+                'message' => "Record Updated Successfully"
+            ]);
+        }
     }
 
     /**
@@ -153,6 +176,5 @@ class ContactController extends Controller
             'status' => 200,
             'message' => "User Deleted Successfully"
         ]);
-
     }
 }

@@ -12,7 +12,7 @@ const Error_page = () => {
                     <h1 className='mb-5 text-danger'>Oops...</h1>
 
                     <h5 className='mb-5'>Please check the database connection</h5>
-                    <div><Link to="/" className="btn btn-primary">Try Again</Link></div>
+                    <div><Link className="btn btn-primary" onClick={() => window.location.reload(true)}>Try Again</Link></div>
                 </div>
 
                 <div className='col-6 text-center'>

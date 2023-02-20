@@ -13,25 +13,23 @@ const ViewUser = () => {
     const [query, setQuery] = useState([]);
     const [filterdata, setFilterData] = useState([]);
 
-    const handleSearch = (event) =>{
+    const handleSearch = (event) => {
         const getUserData = event.target.value;
         console.log(getUserData);
         setQuery(getUserData);
 
-        if(getUserData.length > 0)
-        {
+        if (getUserData.length > 0) {
             const getUserData = event.target.value.toLowerCase();
-            const searchData = getValue.filter(item=> item.firstName.toLowerCase().includes(getUserData));
-            if(searchData.length > 0)
-            {
+            const searchData = getValue.filter(item => item.firstName.toLowerCase().includes(getUserData));
+            if (searchData.length > 0) {
                 setValue(searchData);
             }
-            else{
-                setValue([{"firstName" : "No data Record"}])
+            else {
+                setValue([{ "firstName": "No data Record" }])
             }
         }
 
-        else{
+        else {
             setValue(filterdata);
         }
     }
@@ -76,37 +74,7 @@ const ViewUser = () => {
         })
     }
 
-    if (loding) {
-        student_table =
-            <tr className='text-center'>
-                <td colSpan={7}>
-                    <div className="spinner-border text-primary" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </div>
-                </td>
-            </tr>;
-    }
 
-    else {
-        student_table = getValue.map((item) => {
-            return (
-                <tr key={item.id}>
-                    <td>
-                        <img src={'http://localhost:8000/upload/students/' + item.Avatar} width="50px" alt='Avatar' />
-                    </td>
-                    <td>{item.firstName}</td>
-                    <td>{item.lastName}</td>
-                    <td>{item.contact}</td>
-                    <td>{item.email}</td>
-                    <td colSpan={3} className="">
-                        <Link to={"ViewOneUser/" + item.id} className="btn btn-primary btn-sm" style={{ marginRight: '6px' }}><i className="fa fa-search-plus" aria-hidden="true"></i> View</Link>
-                        <Link to={"edit_user/" + item.id} className="btn btn-warning btn-sm" style={{ marginRight: '6px' }}><i className="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</Link>
-                        <Link onClick={(e) => deleteStudent(e, item.id)} className="btn btn-danger btn-sm"><i className="fa fa-trash-o" aria-hidden="true"></i> Delete</Link>
-                    </td>
-                </tr>
-            );
-        })
-    }
     return (
         <div className='container py-3'>
             <div className="container pt-1">
@@ -134,7 +102,33 @@ const ViewUser = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {student_table}
+                        {loding
+                            ? <tr className='text-center'>
+                                <td colSpan={7}>
+                                    <div className="spinner-border text-primary" role="status">
+                                        <span className="visually-hidden">Loading...</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            : getValue.map((item, index) => {
+                                return (
+                                    <tr key={index}>
+                                        <td>
+                                            <img src={'http://localhost:8000/upload/students/' + item.Avatar} width="50px" alt='Avatar' />
+                                        </td>
+                                        <td>{item.firstName}</td>
+                                        <td>{item.lastName}</td>
+                                        <td>{item.contact}</td>
+                                        <td>{item.email}</td>
+                                        <td colSpan={3} className="">
+                                            <Link to={"ViewOneUser/" + item.id} className="btn btn-primary btn-sm" style={{ marginRight: '6px' }}><i className="fa fa-search-plus" aria-hidden="true"></i> View</Link>
+                                            <Link to={"edit_user/" + item.id} className="btn btn-warning btn-sm" style={{ marginRight: '6px' }}><i className="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</Link>
+                                            <Link onClick={(e) => deleteStudent(e, item.id)} className="btn btn-danger btn-sm"><i className="fa fa-trash-o" aria-hidden="true"></i> Delete</Link>
+                                        </td>
+                                    </tr>
+                                );
+                            })
+                        }
                     </tbody>
                 </table>
             </div>

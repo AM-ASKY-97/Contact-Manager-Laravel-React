@@ -13,20 +13,31 @@ const ViewUser = () => {
     const [query, setQuery] = useState([]);
     const [filterdata, setFilterData] = useState([]);
 
+    
+
     const handleSearch = (event) => {
         const getUserData = event.target.value;
         console.log(getUserData);
         setQuery(getUserData);
 
         if (getUserData.length > 0) {
-            const getUserData = event.target.value.toLowerCase();
-            const searchData = getValue.filter(item => item.firstName.toLowerCase().includes(getUserData));
-            if (searchData.length > 0) {
-                setValue(searchData);
-            }
-            else {
-                setValue([{ "firstName": "No data Record" }])
-            }
+            //const getUserData = event.target.value.toLowerCase();
+            //const searchData = getValue.filter(item => item.firstName.toLowerCase().includes(getUserData));
+            axios.get('http://127.0.0.1:8000/api/search/' + getUserData).then(res => {
+                if (res.data.user.length > 0) {
+                    setValue(res.data.user);
+                    document.getElementById('btn').hidden = false;
+                    document.getElementById('img').hidden = false;
+                    document.getElementById("fName").style.color = "";
+                }
+
+                else {
+                    setValue([{ "firstName": "No data Record",}])
+                    document.getElementById('btn').hidden = true;
+                    document.getElementById('img').hidden = true;
+                    document.getElementById("fName").style.color = "red";
+                }
+            })
         }
 
         else {
@@ -113,14 +124,14 @@ const ViewUser = () => {
                             : getValue.map((item, index) => {
                                 return (
                                     <tr key={index}>
-                                        <td>
+                                        <td id='img'>
                                             <img src={'http://localhost:8000/upload/students/' + item.Avatar} width="50px" alt='Avatar' />
                                         </td>
-                                        <td>{item.firstName}</td>
+                                        <td id='fName'>{item.firstName}</td>
                                         <td>{item.lastName}</td>
                                         <td>{item.contact}</td>
                                         <td>{item.email}</td>
-                                        <td colSpan={3} className="">
+                                        <td colSpan={3} className="" id='btn'>
                                             <Link to={"ViewOneUser/" + item.id} className="btn btn-primary btn-sm" style={{ marginRight: '6px' }}><i className="fa fa-search-plus" aria-hidden="true"></i> View</Link>
                                             <Link to={"edit_user/" + item.id} className="btn btn-warning btn-sm" style={{ marginRight: '6px' }}><i className="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</Link>
                                             <Link onClick={(e) => deleteStudent(e, item.id)} className="btn btn-danger btn-sm"><i className="fa fa-trash-o" aria-hidden="true"></i> Delete</Link>

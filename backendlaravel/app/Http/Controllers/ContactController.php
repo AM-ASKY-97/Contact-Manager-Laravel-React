@@ -163,6 +163,17 @@ class ContactController extends Controller
         }
     }
 
+    public function search($query)
+    {
+        $search = $query;
+        $user =Contact::where('firstName', 'LIKE', '%'.$search.'%')->get();
+
+        return response()->json([
+            'status' => 200,
+            'user' => $user,
+        ]);
+    }
+
     /**
      * Remove the specified resource from storage.
      */

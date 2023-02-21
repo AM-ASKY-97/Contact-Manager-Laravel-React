@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 
 const Edit_user = () => {
 
+
+
     const navigate = useNavigate();
 
     const { id } = useParams();
@@ -19,6 +21,8 @@ const Edit_user = () => {
         address: ""
     })
 
+    const [btnBack, setBtnBack] = useState(true);
+
     const [inputError, setErrorInput] = useState({
         error_list: [],
     })
@@ -29,7 +33,7 @@ const Edit_user = () => {
     }
 
     const [photo, setPhoto] = useState({
-        Avatar :"",
+        Avatar: "",
     })
 
     const handleImage = (event) => {
@@ -90,6 +94,8 @@ const Edit_user = () => {
                     showConfirmButton: false,
                     timer: 1500
                 });
+
+                setBtnBack(false);
             }
 
             else {
@@ -161,18 +167,20 @@ const Edit_user = () => {
                             </div>
                         </div>
 
-                        <button className='btn btn-success' id='update'><i className="fa fa-check-circle" aria-hidden="true"></i> Update user</button>
-
+                        {btnBack
+                            ? (<button className='btn btn-success' id='update'><i className="fa fa-check-circle" aria-hidden="true"></i> Update user</button>)
+                            : (<div id='back'><Link to="/" className="btn btn-primary"><i className="fa fa-chevron-circle-left" aria-hidden="true"></i> Go Back</Link></div>)
+                        }
                     </div>
 
 
                     <div className="col-sm-12 col-md-6 p-3 d-none d-md-block text-center">
-                        
+
 
 
                         <div className="dropdown">
                             <a className="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src={'http://localhost:8000/upload/students/' + photo.Avatar} loading="lazy" alt="" className="img-fluid logo" />
+                                <img src={'http://localhost:8000/upload/students/' + photo.Avatar} loading="lazy" alt="" className="img-fluid logo" />
                             </a>
                             <ul className="dropdown-menu">
                                 <input className="form-control" type="file" id="formFileMultiple" name="Avatar" onChange={handleImage} />

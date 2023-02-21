@@ -1,22 +1,23 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import Error_logo from './4670233.jpg'
+import Err from './err-img.svg';
 
 import './style.css'
 
 const Error_page = () => {
     return (
-        <div className='w-75 m-auto'>
-            <div className='row'>
-                <div className='col-6'>
-                    <h1 className='mb-5 text-danger'>Oops...</h1>
-
-                    <h5 className='mb-5'>Please check the database connection</h5>
-                    <div><Link className="btn btn-primary" onClick={() => window.location.reload(true)}>Try Again</Link></div>
+        <div>
+            <div className="card shadow p-1 bg-body-tertiary rounded">
+                <div className='text-center'>
+                    <img src={Err} className="card-img-top img-fluid err-img " alt="..." />
                 </div>
+                <div className="card-body">
+                    <div className="card-body">
+                        <h5 className="card-title">Something went wrong!</h5>
+                        <p className="card-text">Please check the database connection.</p>
 
-                <div className='col-6 text-center'>
-                    <img src={Error_logo} className='imgLogo' />
+                        <Link className="btn btn-primary" onClick={() => window.location.reload(true)}>Try again</Link>
+                    </div>
                 </div>
             </div>
         </div>

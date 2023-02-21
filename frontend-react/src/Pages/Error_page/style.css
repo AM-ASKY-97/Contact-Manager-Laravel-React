@@ -1,6 +1,9 @@
 
-.imgLogo{
-    border-radius: 50%;
-    width: 300px;
-    background-color: rgb(18, 18, 18);
+.err-img{
+    width: 280px
+}
+
+.card{
+    width: 35rem;
+    margin: auto;
 }

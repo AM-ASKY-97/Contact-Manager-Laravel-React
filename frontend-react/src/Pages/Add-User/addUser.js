@@ -93,7 +93,7 @@ const AddUser = () => {
 
             <div className='row'>
                 <div className="col-xs-12 col-sm-8 col-md-6 mt-3">
-                    <form action='' onSubmit={handleFormsubmit} encType="multipart/form-data">
+                    <form action='' onSubmit={handleFormsubmit} encType="multipart/form-data" autocomplete="off">
                         <div className="row mb-3">
                             <div className="col-xs-12 col-sm-12 col-md-6">
                                 <label htmlFor="" className="form-label">First Name</label>

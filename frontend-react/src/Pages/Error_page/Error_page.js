@@ -16,7 +16,7 @@ const Error_page = () => {
                         <h5 className="card-title">Something went wrong!</h5>
                         <p className="card-text">Please check the database connection.</p>
 
-                        <Link className="btn btn-primary" onClick={() => window.location.reload(true)}>Try again</Link>
+                        <Link className="btn btn-primary" onClick={() => window.location.reload(true)}>Reload</Link>
                     </div>
                 </div>
             </div>

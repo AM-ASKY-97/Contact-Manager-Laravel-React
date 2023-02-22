@@ -128,7 +128,7 @@ const Edit_user = () => {
                 <hr />
             </div>
 
-            <form action='' onSubmit={handleFormsubmit} encType="multipart/form-data" autocomplete="off">
+            <form action='' onSubmit={handleFormsubmit} encType="multipart/form-data" autoComplete="off">
                 <div className='row'>
                     <div className="col-xs-12 col-sm-8 col-md-6 mt-3">
                         <div className="row mb-3">
